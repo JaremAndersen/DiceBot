@@ -1,4 +1,8 @@
 defmodule TelleBot.MessageTick do
+  use GenServer
+
+  require Logger
+
   def update do
     {status, updates} = Nadia.get_updates()
 
@@ -19,41 +23,32 @@ defmodule TelleBot.MessageTick do
     end
   end
 
-  def respond_to_messages(updates) do
-    [head | tail] = updates
+  def respond_to_messages([]), do: nil
+  def respond_to_messages([%{message: nil} | _tail]), do: nil
 
-    unless head.message == nil do
-      try do
-        respond(head.message.chat.id, head.message.text)
-      rescue
-        RuntimeError -> IO.puts("there was an error")
-      end
-    end
-
-    unless tail == [] do
-      respond_to_messages(tail)
-    end
+  def respond_to_messages([head | tail]) do
+    spawn(fn -> respond(head.message.chat.id, head.message.text) end)
+    respond_to_messages(tail)
   end
 
+  def respond(_id, nil), do: nil
+
   def respond(id, text) do
-    if text =~ "/r" and (text =~ "d" or text =~ "D") do
-      [number, size] =
-        String.downcase(text)
-        |> String.replace("/r", "")
-        |> String.trim()
-        |> String.split("d")
-        |> Enum.map(fn val -> String.trim(val) end)
+    valid = Regex.run(~r/^\/r (\d+)[dD](\d+)$/, text)  |> Enum.map(&Integer.parse/1) |> Enum.filter(fn val -> val != :error end) |> IO.inspect()
 
-      unless number === "" || size == "" do
-        dice = roll(String.to_integer(number), String.to_integer(size))
+    case valid do
+      nil ->
+        Nadia.send_message(id, "Huh?")
 
-        unless dice == nil do
-          prettyDice = String.replace("#{inspect(dice)}", "[", "") |> String.replace("]", "")
-          total = Enum.sum(dice)
-          output = "You rolled a #{total}\n#{prettyDice}"
-          Nadia.send_message(id, output)
-        end
-      end
+      [{ number,_}, {size,_}] when number <= 69420 ->
+        dice = roll(number,size)
+        prettyDice = String.replace("#{inspect(dice)}", "[", "") |> String.replace("]", "")
+        total = Enum.sum(dice)
+        output = "You rolled a #{total}\n#{prettyDice}"
+        Nadia.send_message(id, output)
+
+      _ ->
+        Nadia.send_message(id, "🖕")
     end
   end
 
@@ -63,9 +58,27 @@ defmodule TelleBot.MessageTick do
     end
   end
 
-  def tick(offset \\ 0) do
-    offset = update(offset + 1) || 0
-    Process.sleep(1000)
-    tick(offset)
+  @poll_interval :timer.seconds(1)
+
+  @spec start_link(GenServer.options()) :: GenServer.on_start()
+  def start_link(options) do
+    GenServer.start_link(__MODULE__, :ok, options)
+  end
+
+  def init(:ok) do
+    Logger.debug("Starting bot")
+    schedule_poll()
+    {:ok, 0}
+  end
+
+  defp schedule_poll do
+    Process.send_after(self(), :poll, @poll_interval)
+  end
+
+  def handle_info(:poll, offset) do
+    Logger.debug("Polling")
+    next_offset = update(offset + 1) || 0
+    schedule_poll()
+    {:noreply, next_offset}
   end
 end

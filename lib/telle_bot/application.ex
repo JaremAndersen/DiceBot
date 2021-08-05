@@ -10,7 +10,7 @@ defmodule TelleBot.Application do
     children = [
       # Starts a worker by calling: TelleBot.Worker.start_link(arg)
       # {TelleBot.Worker, arg}
-      TelleBot.MessageTick.tick()
+      TelleBot.MessageTick
     ]
 
     # See https://hexdocs.pm/elixir/Supervisor.html
