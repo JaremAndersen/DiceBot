@@ -1,20 +1,13 @@
 # DiceBot
 
-**TODO: Add description**
+Simple telegram bot that rolls dice!
 
-## Installation
+## Development
 
-If [available in Hex](https://hex.pm/docs/publish), the package can be installed
-by adding `dice_bot` to your list of dependencies in `mix.exs`:
+1. Create a new tellegram bot via the [@BotFather](https://t.me/botfather)
+2. Add the token for your new bot to your environment variables under `TelegramToken`
+3. run `mix run --no-halt` to start or `iex -S mix` to run in iex
 
-```elixir
-def deps do
-  [
-    {:dice_bot, "~> 0.1.0"}
-  ]
-end
-```
+## Commands
 
-Documentation can be generated with [ExDoc](https://github.com/elixir-lang/ex_doc)
-and published on [HexDocs](https://hexdocs.pm). Once published, the docs can
-be found at [https://hexdocs.pm/dice_bot](https://hexdocs.pm/dice_bot).
+`/r 10d6` where 10 is the number of dice and 6 is the dice to roll.
