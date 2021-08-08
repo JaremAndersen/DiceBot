@@ -1,10 +1,12 @@
 # DiceBot
 
-Simple telegram bot that rolls dice!
+Simple Telegram bot that rolls dice!
+
+Like what you see? Add @jarem_dice_bot to your Telegram group
 
 ## Development
 
-1. Create a new tellegram bot via the [@BotFather](https://t.me/botfather)
+1. Create a new Telegram bot via the [@BotFather](https://t.me/botfather)
 2. Add the token for your new bot to your environment variables under `TelegramToken`
 3. run `mix run --no-halt` to start or `iex -S mix` to run in iex
 
