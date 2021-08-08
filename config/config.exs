@@ -1,4 +1,4 @@
 use Mix.Config
 
 config :nadia,
-  token: ""
+  token: System.get_env("TelegramToken")

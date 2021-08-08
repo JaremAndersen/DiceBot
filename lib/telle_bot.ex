@@ -44,6 +44,7 @@ defmodule TelleBot.MessageTick do
     case valid do
       nil ->
         Nadia.send_message(id, "Huh?")
+
       [{69, _}, {69, _}] ->
         Nadia.send_sticker(
           id,
@@ -56,11 +57,11 @@ defmodule TelleBot.MessageTick do
           "CAACAgIAAxkBAAIBV2EMbvjiuySDSJY4d58r9Vl3_JikAAJeAANSiZEj_nGk1T5n2YQgBA"
         )
 
-        [{666, _}, {666, _}] ->
-          Nadia.send_sticker(
-            id,
-            "CAACAgIAAxkBAAIBhWEMeX4EL-9KsNP_F32OxZf81jJbAAKmAAP3AsgPqwzk86kqxlggBA"
-          )
+      [{666, _}, {666, _}] ->
+        Nadia.send_sticker(
+          id,
+          "CAACAgIAAxkBAAIBhWEMeX4EL-9KsNP_F32OxZf81jJbAAKmAAP3AsgPqwzk86kqxlggBA"
+        )
 
       [{number, _}, {size, _}] when number <= 69420 ->
         dice = roll(number, size)
@@ -77,7 +78,10 @@ defmodule TelleBot.MessageTick do
         Nadia.send_message(id, output)
 
       _ ->
-        Nadia.send_sticker(id, "CAACAgIAAxkBAAIBX2EMcRp_Ki8iUzHAQAa_dqxYR5kXAAJ8AwACbbBCAwPPVZFWz3BMIAQ")
+        Nadia.send_sticker(
+          id,
+          "CAACAgIAAxkBAAIBX2EMcRp_Ki8iUzHAQAa_dqxYR5kXAAJ8AwACbbBCAwPPVZFWz3BMIAQ"
+        )
     end
   end
 
@@ -96,6 +100,7 @@ defmodule TelleBot.MessageTick do
 
   def init(:ok) do
     Logger.debug("Starting bot")
+    Logger.debug(System.get_env("TelegramToken"))
     schedule_poll()
     {:ok, 0}
   end

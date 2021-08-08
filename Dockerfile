@@ -1,5 +1,7 @@
 FROM  elixir:1.11-alpine as img
 
+ARG TelegramToken
+ENV TelegramToken=${TelegramToken}
 
 COPY ./lib ./app/lib
 COPY ./config ./app/config
