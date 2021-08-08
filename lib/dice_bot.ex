@@ -1,4 +1,4 @@
-defmodule TelleBot.MessageTick do
+defmodule DiceBot.MessageTick do
   use GenServer
 
   require Logger
@@ -100,7 +100,6 @@ defmodule TelleBot.MessageTick do
 
   def init(:ok) do
     Logger.debug("Starting bot")
-    Logger.debug(System.get_env("TelegramToken"))
     schedule_poll()
     {:ok, 0}
   end

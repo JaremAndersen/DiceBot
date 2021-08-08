@@ -1,4 +1,4 @@
-defmodule TelleBot.Application do
+defmodule DiceBot.Application do
   # See https://hexdocs.pm/elixir/Application.html
   # for more information on OTP Applications
   @moduledoc false
@@ -8,14 +8,14 @@ defmodule TelleBot.Application do
   @impl true
   def start(_type, _args) do
     children = [
-      # Starts a worker by calling: TelleBot.Worker.start_link(arg)
-      # {TelleBot.Worker, arg}
-      TelleBot.MessageTick
+      # Starts a worker by calling: DiceBot.Worker.start_link(arg)
+      # {DiceBot.Worker, arg}
+      DiceBot.MessageTick
     ]
 
     # See https://hexdocs.pm/elixir/Supervisor.html
     # for other strategies and supported options
-    opts = [strategy: :one_for_one, name: TelleBot.Supervisor]
+    opts = [strategy: :one_for_one, name: DiceBot.Supervisor]
     Supervisor.start_link(children, opts)
   end
 end

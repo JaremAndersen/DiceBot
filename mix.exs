@@ -1,9 +1,9 @@
-defmodule TelleBot.MixProject do
+defmodule DiceBot.MixProject do
   use Mix.Project
 
   def project do
     [
-      app: :telle_bot,
+      app: :dice_bot,
       version: "0.1.0",
       elixir: "~> 1.11",
       start_permanent: Mix.env() == :prod,
@@ -15,7 +15,7 @@ defmodule TelleBot.MixProject do
   def application do
     [
       extra_applications: [:logger],
-      mod: {TelleBot.Application, []}
+      mod: {DiceBot.Application, []}
     ]
   end
 
