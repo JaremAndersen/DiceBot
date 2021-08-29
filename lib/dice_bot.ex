@@ -36,7 +36,7 @@ defmodule DiceBot.MessageTick do
 
   def respond(id, text) do
     valid =
-      Regex.run(~r/^\/r (\d+)[dD](\d+)$/, text)
+      Regex.run(~r/^\/r (\d+)[dD](\d+)[+]?(\d+)?$/, text)
       |> Enum.map(&Integer.parse/1)
       |> Enum.filter(fn val -> val != :error end)
       |> IO.inspect()
@@ -51,13 +51,13 @@ defmodule DiceBot.MessageTick do
           "CAACAgIAAxkBAAIBXmEMcDrKtJLqKgyyU0ewWz0CrV-VAAJiAQACUomRI3OAqJJmT9VtIAQ"
         )
 
-      [{420, _}, {69, _}] ->
+      [{420, _}, {69, _}, _] ->
         Nadia.send_sticker(
           id,
           "CAACAgIAAxkBAAIBV2EMbvjiuySDSJY4d58r9Vl3_JikAAJeAANSiZEj_nGk1T5n2YQgBA"
         )
 
-      [{666, _}, {666, _}] ->
+      [{666, _}, {666, _}, _] ->
         Nadia.send_sticker(
           id,
           "CAACAgIAAxkBAAIBhWEMeX4EL-9KsNP_F32OxZf81jJbAAKmAAP3AsgPqwzk86kqxlggBA"
@@ -74,6 +74,23 @@ defmodule DiceBot.MessageTick do
 
         output =
           "You rolled a #{total}\nHigh: #{high} \nLow: #{low} \nAverage: #{mean} \n#{prettyDice}"
+
+        Nadia.send_message(id, output)
+
+      [{number, _}, {size, _}, {modifier, _}] when number <= 69420 ->
+        dice = roll(number, size)
+        prettyDice = String.replace("#{inspect(dice)}", "[", "") |> String.replace("]", "")
+
+        total = Enum.sum(dice)
+        low = Enum.min(dice)
+        high = Enum.max(dice)
+        mean = Enum.sum(dice) / length(dice)
+        net = total + modifier
+
+        output =
+          "You rolled a #{total} + #{modifier} for #{net}\nHigh: #{high} \nLow: #{low} \nAverage: #{
+            mean
+          } \n#{prettyDice} "
 
         Nadia.send_message(id, output)
 
