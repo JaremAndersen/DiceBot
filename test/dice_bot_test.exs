@@ -1,10 +1,9 @@
 defmodule DiceBotTest do
   use ExUnit.Case
-  doctest DiceBot.MessageTick
+  alias DiceBot.Roll
 
   test "rolls dice" do
-    assert DiceBot.MessageTick.roll(5, 1) == [1, 1, 1, 1, 1]
+    roll = %Roll{quantity: 5, size: 1}
+    assert DiceBot.Roller.rollDice(roll).dice == [1, 1, 1, 1, 1]
   end
-
-  test ""
 end
